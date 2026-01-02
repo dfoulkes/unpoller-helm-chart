@@ -13,6 +13,7 @@ jobs:
     # see: https://docs.github.com/en/actions/security-guides/automatic-token-authentication#modifying-the-permissions-for-the-github_token
     permissions:
       contents: write
+      packages: write
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -61,9 +62,17 @@ jobs:
           cp charts/unpoller/README.md README.MD
           git add charts
           git add README.MD
-          git commit -m "chore(unpoller): Updated chart to ${CHART_VERSION} with app version ${UNPOLLER_VERSION}"
+          git commit -m "chore(unpoller): Updated chart and app version to ${UNPOLLER_VERSION}}"
           git push
 
-          # Create and push the tag
-          git tag "${CHART_VERSION}"
-          git push origin "${CHART_VERSION}"
+      - name: Install Helm
+        uses: azure/setup-helm@v4
+        env:
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+
+      - name: Run chart-releaser
+        uses: helm/chart-releaser-action@v1.6.0
+        env:
+          CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+        with:
+          config: .github/cr.yaml
