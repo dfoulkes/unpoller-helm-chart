@@ -50,7 +50,7 @@ jobs:
             CHART_NUM=$((LATEST_CHART_NUM + 1))
           fi
 
-          CHART_VERSION="${UNPOLLER_VERSION}.${CHART_NUM}"
+          CHART_VERSION="${UNPOLLER_VERSION}+${CHART_NUM}"
 
           echo "Setting appVersion to: ${UNPOLLER_VERSION}"
           echo "Setting version to: ${CHART_VERSION}"
