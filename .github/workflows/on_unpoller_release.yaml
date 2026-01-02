@@ -33,27 +33,22 @@ jobs:
         run: |
           UNPOLLER_VERSION=${{ github.event.inputs.unpoller_version }}
 
-          # Determine the next chart number for this unpoller version
-          # Check existing git tags to find the highest chart number
-          LATEST_CHART_NUM=$(git tag -l "${UNPOLLER_VERSION}+chart*" | sed 's/.*+chart//' | sort -n | tail -1)
+          # Read current chart version and increment minor version
+          CURRENT_VERSION=$(yq '.version' charts/unpoller/Chart.yaml | tr -d '"')
 
-          # If no existing chart version found, start with chart1
-          if [ -z "$LATEST_CHART_NUM" ]; then
-            # Also check for old format (with dash) for backwards compatibility
-            LATEST_CHART_NUM=$(git tag -l "${UNPOLLER_VERSION}-Chart*" "${UNPOLLER_VERSION}-chart*" | sed 's/.*-[Cc]hart//' | sort -n | tail -1)
-            if [ -z "$LATEST_CHART_NUM" ]; then
-              CHART_NUM=1
-            else
-              CHART_NUM=$((LATEST_CHART_NUM + 1))
-            fi
-          else
-            CHART_NUM=$((LATEST_CHART_NUM + 1))
-          fi
+          # Remove 'v' prefix if present and split into components
+          CURRENT_VERSION=${CURRENT_VERSION#v}
+          MAJOR=$(echo $CURRENT_VERSION | cut -d. -f1)
+          MINOR=$(echo $CURRENT_VERSION | cut -d. -f2)
+          PATCH=$(echo $CURRENT_VERSION | cut -d. -f3)
 
-          CHART_VERSION="${UNPOLLER_VERSION}+${CHART_NUM}"
+          # Increment minor version, reset patch to 0
+          NEW_MINOR=$((MINOR + 1))
+          CHART_VERSION="${MAJOR}.${NEW_MINOR}.0"
 
+          echo "Current chart version: ${CURRENT_VERSION}"
+          echo "New chart version: ${CHART_VERSION}"
           echo "Setting appVersion to: ${UNPOLLER_VERSION}"
-          echo "Setting version to: ${CHART_VERSION}"
 
           yq -i ".appVersion=\"${UNPOLLER_VERSION}\"" charts/unpoller/Chart.yaml
           yq -i ".version=\"${CHART_VERSION}\"" charts/unpoller/Chart.yaml
@@ -62,7 +57,7 @@ jobs:
           cp charts/unpoller/README.md README.MD
           git add charts
           git add README.MD
-          git commit -m "chore(unpoller): Updated chart and app version to ${UNPOLLER_VERSION}}"
+          git commit -m "chore(unpoller): Update to chart ${CHART_VERSION} with app version ${UNPOLLER_VERSION}"
           git push
 
       - name: Install Helm
