@@ -32,8 +32,31 @@ jobs:
       - name: Update helm values
         run: |
           UNPOLLER_VERSION=${{ github.event.inputs.unpoller_version }}
+
+          # Determine the next chart number for this unpoller version
+          # Check existing git tags to find the highest chart number
+          LATEST_CHART_NUM=$(git tag -l "${UNPOLLER_VERSION}+chart*" | sed 's/.*+chart//' | sort -n | tail -1)
+
+          # If no existing chart version found, start with chart1
+          if [ -z "$LATEST_CHART_NUM" ]; then
+            # Also check for old format (with dash) for backwards compatibility
+            LATEST_CHART_NUM=$(git tag -l "${UNPOLLER_VERSION}-Chart*" "${UNPOLLER_VERSION}-chart*" | sed 's/.*-[Cc]hart//' | sort -n | tail -1)
+            if [ -z "$LATEST_CHART_NUM" ]; then
+              CHART_NUM=1
+            else
+              CHART_NUM=$((LATEST_CHART_NUM + 1))
+            fi
+          else
+            CHART_NUM=$((LATEST_CHART_NUM + 1))
+          fi
+
+          CHART_VERSION="${UNPOLLER_VERSION}+chart${CHART_NUM}"
+
+          echo "Setting appVersion to: ${UNPOLLER_VERSION}"
+          echo "Setting version to: ${CHART_VERSION}"
+
           yq -i ".appVersion=\"${UNPOLLER_VERSION}\"" charts/unpoller/Chart.yaml
-          yq -i ".version=\"${UNPOLLER_VERSION}\"" charts/unpoller/Chart.yaml
+          yq -i ".version=\"${CHART_VERSION}\"" charts/unpoller/Chart.yaml
           make helm-docs
 
           cp charts/unpoller/README.md README.MD
