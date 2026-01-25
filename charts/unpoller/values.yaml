@@ -67,6 +67,22 @@ tolerations: []
 
 affinity: {}
 
+# Service configuration
+service:
+  # Whether to create a Service resource
+  enabled: false
+  # Service type (ClusterIP, NodePort, LoadBalancer)
+  type: ClusterIP
+  # Service port for metrics endpoint
+  port: 9130
+  # Additional annotations for the Service (e.g., for Grafana Alloy autodiscovery)
+  annotations: {}
+
+# PodMonitor configuration for Prometheus Operator
+podMonitor:
+  # Whether to create a PodMonitor resource for Prometheus Operator
+  enabled: true
+
 # section to configure he unpoller dashboards, relaying on the CRDs from grafana operator. https://github.com/grafana/grafana-operator
 dashboards:
   create: true

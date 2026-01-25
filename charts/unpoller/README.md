@@ -43,12 +43,17 @@ See further documentation in how to install unpoller in Kubernetes in http://unp
 | nodeSelector | object | `{}` |  |
 | podAnnotations | object | `{}` |  |
 | podLabels | object | `{}` |  |
+| podMonitor.enabled | bool | `true` | Whether to create a PodMonitor resource for Prometheus Operator. Set to `false` if Prometheus Operator CRDs are not installed. |
 | podSecurityContext | object | `{}` |  |
 | readinessProbe.httpGet.path | string | `"/"` |  |
 | readinessProbe.httpGet.port | string | `"tcp"` |  |
 | replicaCount | int | `1` |  |
 | resources | object | `{}` |  |
 | securityContext | object | `{}` |  |
+| service.annotations | object | `{}` | Additional annotations for the Service (e.g., for Grafana Alloy autodiscovery) |
+| service.enabled | bool | `false` | Whether to create a Service resource |
+| service.port | int | `9130` | Service port for metrics endpoint |
+| service.type | string | `"ClusterIP"` | Service type (ClusterIP, NodePort, LoadBalancer) |
 | serviceAccount.annotations | object | `{}` |  |
 | serviceAccount.automount | bool | `true` |  |
 | serviceAccount.create | bool | `true` |  |
