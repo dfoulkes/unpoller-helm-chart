@@ -1,0 +1,29 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: unpoller
+  description: >
+    UniFi metrics exporter for Prometheus. Scrapes UniFi Dream Machine for
+    network metrics (client roaming, device stats, traffic stats). Exposes
+    Prometheus metrics at :9130. Deployed via Helm chart at
+    github.com/dfoulkes/unpoller-helm-chart.
+  labels:
+    service: unpoller
+    domain: infrastructure
+    tier: standard
+    environment: prod
+    extends: k3s-workload
+  annotations:
+    github.com/project-slug: dfoulkes/unpoller-helm-chart
+  links:
+    - url: https://github.com/dfoulkes/unpoller-helm-chart
+      title: Helm Chart
+      icon: github
+    - url: https://unpoller.com
+      title: UnPoller Documentation
+      icon: docs
+spec:
+  type: service
+  lifecycle: production
+  owner: group:platform-team
+  system: infrastructure
