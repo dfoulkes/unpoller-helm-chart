@@ -2,3 +2,4 @@
 /.crindex/
 .vscode
 .idea
+values-override.yaml
