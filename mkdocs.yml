@@ -1,0 +1,24 @@
+site_name: UnPoller Helm Chart Documentation
+site_description: UnPoller deployment and troubleshooting for foulkes.cloud
+repo_url: https://github.com/dfoulkes/unpoller-helm-chart
+
+nav:
+  - Home: index.md
+  - Troubleshooting:
+    - Float Unmarshalling Bug: troubleshooting/float-unmarshalling.md
+    - ServiceMonitor Configuration: troubleshooting/servicemonitor.md
+
+theme:
+  name: material
+  palette:
+    primary: indigo
+    accent: blue
+
+plugins:
+  - techdocs-core
+
+markdown_extensions:
+  - admonition
+  - codehilite
+  - toc:
+      permalink: true

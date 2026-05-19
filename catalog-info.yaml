@@ -15,6 +15,7 @@ metadata:
     extends: k3s-workload
   annotations:
     github.com/project-slug: dfoulkes/unpoller-helm-chart
+    backstage.io/techdocs-ref: dir:.
   links:
     - url: https://github.com/dfoulkes/unpoller-helm-chart
       title: Helm Chart
