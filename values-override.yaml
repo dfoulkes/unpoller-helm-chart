@@ -1,0 +1,44 @@
+# UnPoller values override for Dan's homelab
+
+image:
+  repository: "ghcr.io/unpoller/unpoller"
+  pullPolicy: IfNotPresent
+
+service:
+  enabled: true
+  type: ClusterIP
+  port: 9130
+
+podMonitor:
+  enabled: true
+
+dashboards:
+  create: false
+  grafana:
+    create: false
+
+upConfig: |
+  [poller]
+      debug = false
+      quiet = false
+      plugins = []
+  [prometheus]
+    disable = false
+    http_listen = "0.0.0.0:9130"
+    report_errors = false
+  [influxdb]
+    disable = true
+  [unifi]
+      dynamic = false
+  [loki]
+      disable = true
+  [[unifi.controller]]    
+      url         = "https://192.168.50.1"
+      user        = "terraform"
+      pass        = "!)keg0)HHuv]|Htt24o"
+      sites       = ["all"]
+      save_ids    = true
+      save_dpi    = true
+      save_sites  = true
+      hash_pii    = false
+      verify_ssl  = false
