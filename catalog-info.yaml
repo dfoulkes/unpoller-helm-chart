@@ -11,6 +11,7 @@ metadata:
     service: unpoller
     domain: infrastructure
     tier: standard
+    trust_zone: none
     environment: prod
     extends: k3s-workload
   annotations:
