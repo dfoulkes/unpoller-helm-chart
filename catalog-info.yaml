@@ -9,15 +9,21 @@ metadata:
     github.com/dfoulkes/unpoller-helm-chart.
   labels:
     service: unpoller
-    domain: infrastructure
+    layer: service
+    domain: network
     tier: standard
     trust_zone: none
     environment: prod
     extends: k3s-workload
+    namespace: monitoring
   annotations:
     github.com/project-slug: dfoulkes/unpoller-helm-chart
     backstage.io/techdocs-ref: dir:.
   links:
+    - url: https://github.com/dfoulkes/unpoller-helm-chart/blob/main/docs/index.md
+      title: Runbook
+      icon: docs
+      type: runbook
     - url: https://github.com/dfoulkes/unpoller-helm-chart
       title: Helm Chart
       icon: github
@@ -28,6 +34,6 @@ spec:
   type: service
   lifecycle: production
   owner: group:platform-team
-  system: infrastructure
+  system: network
   dependsOn:
     - component:prometheus
